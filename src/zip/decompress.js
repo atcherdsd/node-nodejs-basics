@@ -13,11 +13,11 @@ const decompress = async () => {
         )
     };
     const pathToArchive = pathToFiles('archive.gz');
-    const pathTofileToDecompress = pathToFiles('fileToDCompress.txt');
+    const pathToDecompressedFile = pathToFiles('fileToCompress.txt');
     
     try {
         const readStreamSource = createReadStream(pathToArchive);
-        const writeStreamDest = createWriteStream(pathTofileToDecompress);
+        const writeStreamDest = createWriteStream(pathToDecompressedFile);
         const gunzip = createGunzip();
         await pipeline(readStreamSource, gunzip, writeStreamDest);
     } catch (err) {
