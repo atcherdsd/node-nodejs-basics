@@ -1,5 +1,28 @@
+import path from 'path';
+import { createReadStream, createWriteStream } from 'fs';
+import { pipeline } from 'stream/promises';
+import { fileURLToPath } from 'url';
+import { createGunzip } from 'zlib';
+
 const decompress = async () => {
-    // Write your code here 
+    const pathToFiles = (name) => {
+        return path.join(
+            path.dirname(fileURLToPath(import.meta.url)),
+            'files',
+            name
+        )
+    };
+    const pathToArchive = pathToFiles('archive.gz');
+    const pathToDecompressedFile = pathToFiles('fileToCompress.txt');
+    
+    try {
+        const readStreamSource = createReadStream(pathToArchive);
+        const writeStreamDest = createWriteStream(pathToDecompressedFile);
+        const gunzip = createGunzip();
+        await pipeline(readStreamSource, gunzip, writeStreamDest);
+    } catch (err) {
+        throw Error(err.message);
+    }
 };
 
 await decompress();
