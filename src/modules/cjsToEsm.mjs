@@ -3,8 +3,6 @@ import { fileURLToPath } from 'url';
 import { release, version } from 'os';
 import { createServer as createServerHttp } from 'http';
 import './files/c.js';
-import singleA from './files/a.json' assert { type: 'json' };
-import doubleB from './files/b.json' assert { type: 'json' };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,9 +12,9 @@ const random = Math.random();
 let unknownObject;
 
 if (random > 0.5) {
-    unknownObject = singleA;
+    unknownObject = await import('./files/a.json', { assert: { type: 'json'}});
 } else {
-    unknownObject = doubleB;
+    unknownObject = await import('./files/b.json', { assert: { type: 'json'}});
 }
 
 console.log(`Release ${release()}`);
